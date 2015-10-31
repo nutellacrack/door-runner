@@ -1,3 +1,6 @@
 web/game/Compressed
 web/game/Release
 web/game/TemplateData
+
+web/node_modules
+

@@ -1,22 +1,170 @@
 <!doctype html>
-<html lang="en-us">
+<html ng-app="myApp" ng-app lang="en-us">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | Door Runner</title>
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <link rel="shortcut icon" href="TemplateData/favicon.ico" />
+    
+    <title>The Door Runner</title>
+
+    
+    <!-- Font (Google Open Sans) -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700italic,600,300,400italic' rel='stylesheet' type='text/css'>
+    <!-- Icon Font -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- Unity stuff -->
+    <!-- <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="shortcut icon" href="TemplateData/favicon.ico" /> -->
     <script src="TemplateData/UnityProgress.js"></script>
+
+    <!-- Perfect scrollbar -->
+    <link rel="stylesheet" href="../css/perfect-scrollbar.min.css" />
+    
+
+
+
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <script src="js/jquery.min.js"></script>
+    <!-- AngularJS -->
+    <script src="js/angular.min.js"></script>
+    <script src="app.js"></script>
+
+    <script src="js/perfect-scrollbar.min.js"></script>
+
+
   </head>
   <body class="template">
-    <p class="header"><span>Unity WebGL Player | </span>Door Runner</p>
-    <div class="template-wrap clear">
-    <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" height="600px" width="960px"></canvas>
-      <div class="logo"></div>
-      <div class="fullscreen"><img src="TemplateData/fullscreen.png" width="38" height="38" alt="Fullscreen" title="Fullscreen" onclick="SetFullscreen(1);" /></div>
-      <div class="title">Door Runner</div>
+
+  <div id="main-scope" ng-controller="listCtrl">
+
+  
+  <!-- Page 1 -->
+  <div class="page" id="page-1">
+    <div class="align-v-translate">
+      <div class="content">
+        <div class="live-table-wraper">
+          <div class="score-table live nano" id="nano-scoller-1">
+          <div class="nano-content">
+
+  <!-- ng-repeat="user in scoreTable | orderBy: 'score*1' : true" ng-class="{'me': (user.id == player.id)}" -->
+            <div class="score-table__row cfix" ng-repeat="user in liveScoreTable | orderBy: 'score*1' : true" ng-class="{'me': (user.id == player.id)}">
+
+              <div class="score-table__data score-table__data--platz">
+                <span>{{$index + 1}}</span>
+              </div>
+              <div class="score-table__data score-table__data--name">
+                <span>{{user.name}}</span>
+              </div>
+              <div class="score-table__data score-table__data--score">
+                <span>{{user.score}}</span>
+              </div>
+              <div class="score-table__data score-table__data--land">
+                <span>{{user.land}}</span>
+              </div>
+
+            </div>
+          </div>
+          </div>
+        </div>
+        <div>
+          <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" height="600px" width="960px"></canvas>
+        </div>
+
+      </div>
     </div>
-    <p class="footer">&laquo; created with <a href="http://unity3d.com/" title="Go to unity3d.com">Unity</a> &raquo;</p>
+  </div>
+
+  <!-- Page 2 -->
+  <div class="page" id="page-2">
+    
+    <table>
+    <thead> 
+    <th>Platz</th>
+    <th>Score</th>
+    <th>Name</th>
+    <th>Land</th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="user in scoreTable | orderBy: 'score*1' : true" ng-class="{'me': (user.id == player.id)}">
+          <td>{{$index +1}}</td>
+          <td>{{user.score}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.land}}</td>
+      </tr>
+    </tbody>
+    </table> 
+
+
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+  </div>
+
+
+    <!-- get Funtions from Unity -->
+    <script type='text/javascript'>
+
+
+      var saveToScope = function(data, to){
+        setTimeout(function(){
+          var scope = angular.element($('#main-scope')).scope();
+          scope.$apply(function(){
+              scope.player[to] = data;
+          });
+        }, 0);
+      };
+
+      var getUsername =  function(data){
+        //console.log('get Username');
+        //console.log(data);
+
+        saveToScope(data, 'name');
+
+      };
+
+      var getStyle = function(data){
+        console.log('get Style');
+        console.log(data);
+      };
+      var getScore = function(data){
+        var scope = angular.element($('#main-scope')).scope().savePlayer();
+        var scope = angular.element($('#main-scope')).scope().getPlayersfromDB();
+      };
+      var getLiveScore = function(data){
+        console.log('get Livescore');
+
+        var scope = angular.element($('#main-scope')).scope().updatePlayer(data);
+      };
+
+      var getStyles = function(data){
+        console.log('get Style Array');
+        console.log(data);
+      };
+
+      var showStats = function(){
+        console.log('show stats')
+      };
+
+
+
+
+
+    </script>
+
+
+
+    <!-- Unity stuff -->
     <script type='text/javascript'>
   // connect to canvas
   var Module = {
@@ -63,11 +211,11 @@
 <script src="Release/fileloader.js"></script>
 <script>if (!(!Math.fround)) {
   var script = document.createElement('script');
-  script.src = "Release/html5.js";
+  script.src = "Release/ver 0.4.js";
   document.body.appendChild(script);
 } else {
   var codeXHR = new XMLHttpRequest();
-  codeXHR.open('GET', 'Release/html5.js', true);
+  codeXHR.open('GET', 'Release/ver 0.4.js', true);
   codeXHR.onload = function() {
     var code = codeXHR.responseText;
     if (!Math.fround) { 
@@ -101,5 +249,22 @@ try {
   codeXHR.send(null);
 }
 </script>
+
+<script type="text/javascript">         
+  // plain JavaScript example
+
+  function jsonpCallback(data) { 
+    
+    //console.log(data.address['country_code']);
+
+    saveToScope(data.address['country_code'], 'land');
+    
+  }
+
+</script>
+<script src="http://api.wipmania.com/jsonp?callback=jsonpCallback" type="text/javascript"></script>
+
+
+
   </body>
 </html>
