@@ -7,9 +7,9 @@
 		public $data = "";
 		
 		const DB_SERVER = "localhost";
-		const DB_USER = "door-runner";
-		const DB_PASSWORD = "dachziegel";
-		const DB = "door-runner";
+		const DB_USER = "root";
+		const DB_PASSWORD = "";
+		const DB = "angularcode_customer";
 
 		private $db = NULL;
 		private $mysqli = NULL;

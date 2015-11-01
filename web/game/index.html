@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="myApp" ng-app lang="en-us">
+<html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -12,6 +12,8 @@
     <!-- Icon Font -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
+
+     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
     <!-- Unity stuff -->
     <!-- <link rel="stylesheet" href="TemplateData/style.css">
     <link rel="shortcut icon" href="TemplateData/favicon.ico" /> -->
@@ -29,13 +31,14 @@
     <script src="js/jquery.min.js"></script>
     <!-- AngularJS -->
     <script src="js/angular.min.js"></script>
+    <script src="js/angular-animate.min.js"></script>
     <script src="app.js"></script>
 
     <script src="js/perfect-scrollbar.min.js"></script>
 
 
   </head>
-  <body class="template">
+  <body ng-app="myApp" class="template">
 
   <div id="main-scope" ng-controller="listCtrl">
 
@@ -45,11 +48,13 @@
     <div class="align-v-translate">
       <div class="content">
         <div class="live-table-wraper">
-          <div class="score-table live nano" id="nano-scoller-1">
-          <div class="nano-content">
+          <div class="score-table live">
 
   <!-- ng-repeat="user in scoreTable | orderBy: 'score*1' : true" ng-class="{'me': (user.id == player.id)}" -->
-            <div class="score-table__row cfix" ng-repeat="user in liveScoreTable | orderBy: 'score*1' : true" ng-class="{'me': (user.id == player.id)}">
+            <div class="score-table__row cfix"
+                 ng-repeat="user in liveScoreTable"
+                 ng-class="{'me': (user.id == player.id)}"
+                 ng-hide="$index<livePlayerIndex-3 || $index>livePlayerIndex+3">
 
               <div class="score-table__data score-table__data--platz">
                 <span>{{$index + 1}}</span>
@@ -65,7 +70,6 @@
               </div>
 
             </div>
-          </div>
           </div>
         </div>
         <div>
@@ -127,8 +131,10 @@
 
       var getUsername =  function(data){
         //console.log('get Username');
-        //console.log(data);
-
+        console.log(data);
+        
+        angular.element($('#main-scope')).scope().changePlayerID(data);
+        
         saveToScope(data, 'name');
 
       };
@@ -138,8 +144,13 @@
         console.log(data);
       };
       var getScore = function(data){
-        var scope = angular.element($('#main-scope')).scope().savePlayer();
-        var scope = angular.element($('#main-scope')).scope().getPlayersfromDB();
+        
+        angular.element($('#main-scope')).scope().savePlayer();
+        
+        setTimeout(function(){
+          angular.element($('#main-scope')).scope().getPlayersfromDB();
+        }, 200);
+        
       };
       var getLiveScore = function(data){
         console.log('get Livescore');

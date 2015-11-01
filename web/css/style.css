@@ -131,3 +131,10 @@ body {
 .score-table__data--land {
   width: 15%;
 }
+.move-animation.ng-move {
+  transition: 1.75s;
+  opacity: 0;
+}
+.move-animation.ng-move.ng-move-active {
+  opacity: 1;
+}

@@ -42,7 +42,7 @@ app.service('uniqueId', function() {
     return uniqueId;
 });
 
-app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService) {
+app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService, $filter) {
 
   $scope.player = {};
   $scope.player.score = 0;
@@ -55,7 +55,7 @@ app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService) {
   }
 
 
-  $scope.scrollLiveTable = function() {
+/*  $scope.scrollLiveTable = function() {
     var scrollerHeight = $("#nano-scoller-1").height();
     var topScrollPosition = $(".score-table__row.me").offset().top;
     console.log(scrollerHeight);
@@ -67,7 +67,7 @@ app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService) {
 
     $("#nano-scoller-1").nanoScroller();
     
-  }, 0);
+  }, 0);*/
 
 
   // generate List
@@ -77,11 +77,6 @@ app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService) {
     
       
 
-    scoreService.getPlayers().then(function(data){
-        $scope.scoreTable = data.data;
-
-        $scope.liveScoreTable = angular.copy($scope.scoreTable);
-    });
 
   // set List
       
@@ -90,8 +85,13 @@ app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService) {
             $scope.scoreTable = data.data;
 
             $scope.liveScoreTable = angular.copy($scope.scoreTable);
+
+            $scope.liveScoreTable = $filter('orderBy')($scope.liveScoreTable,'score*1',true);
         });
       };
+      
+
+      $scope.getPlayersfromDB();
       
       $scope.idExists = function (id){
         for(var i=0; i < $scope.liveScoreTable.length; i++){
@@ -119,11 +119,17 @@ app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService) {
       $scope.updatePlayer = function(score) {
         
 
-        $("#nano-scoller-1").nanoScroller();
+        //$("#nano-scoller-1").nanoScroller();
         
 
         $scope.player.score = score;
         $scope.$apply();
+
+
+        //$scope.livePlayerIndex = $scope.idExists($scope.player.id).i;
+        //$scope.$apply();
+
+        
         //console.log($scope.idExists($scope.player.id).value);
         //console.log($scope.idExists($scope.player.id).i);
         //console.log($scope.liveScoreTable);
@@ -131,13 +137,26 @@ app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService) {
         if($scope.idExists($scope.player.id).value){ 
           // wenn Spieler schon existiert
 
+          $scope.livePlayerIndex = $scope.idExists($scope.player.id).i;
+
 
           if($scope.liveScoreTable[$scope.idExists($scope.player.id).i].score < $scope.player.score){
             // nur wenn neuer score größer ist als alter
+
             $scope.liveScoreTable[$scope.idExists($scope.player.id).i].score = angular.copy($scope.player.score);
             $scope.$apply();
-            $scope.scrollLiveTable();
-          } 
+          }
+
+          if($scope.livePlayerIndex > 0){
+            if($scope.liveScoreTable[$scope.livePlayerIndex -1].score == $scope.liveScoreTable[$scope.livePlayerIndex].score){
+              $scope.livePlayerIndex = Math.max(0,$scope.livePlayerIndex-1);
+              console.log($scope.livePlayerIndex);
+              $scope.$apply();
+            }
+          }
+
+          $scope.liveScoreTable = $filter('orderBy')($scope.liveScoreTable,'score*1',true);
+          $scope.$apply(); 
 
         } else {
           // wenn Spieler noch nicht existiert
@@ -145,13 +164,17 @@ app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService) {
             $scope.liveScoreTable = [];
           }
           $scope.liveScoreTable.push(angular.copy($scope.player));
+          
+          $scope.livePlayerIndex = $scope.liveScoreTable.length -1;
+
           $scope.$apply();
+
         }
 
         
       };
 
-      $scope.savePlayer = function() {
+      $scope.savePlayer = function(callback) {
         $scope.player.date = new Date();
         
         console.log($scope.player);
@@ -178,6 +201,15 @@ app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService) {
           scoreService.insertPlayer($scope.player);
         }
       }
+
+
+      // change player id if player name changed
+      $scope.changePlayerID = function(newName){
+        if(!(newName == $scope.player.name)) 
+          $scope.player.id = uniqueId();
+      };
+
+
 
 });
 
