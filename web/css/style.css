@@ -8,7 +8,7 @@ body {
 }
 body {
   font-family: 'Open Sans';
-  background-color: #ffa500;
+  background-color: #fff3e5;
 }
 *,
 *:after,
@@ -25,6 +25,20 @@ body {
 }
 #main-scope {
   height: 100%;
+  background-color: transparent;
+  transition: background 1s ease-in-out;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+#main-scope.theme-0 {
+  background-image: url("../assets/img/bg1.jpg");
+}
+#main-scope.theme-1 {
+  background-image: url("../assets/img/bg2.jpg");
+}
+#main-scope.theme-2 {
+  background-color: #42647f;
 }
 .page {
   height: 100%;

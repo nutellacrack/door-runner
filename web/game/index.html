@@ -40,7 +40,7 @@
   </head>
   <body ng-app="myApp" class="template">
 
-  <div id="main-scope" ng-controller="listCtrl">
+  <div id="main-scope" ng-controller="listCtrl" ng-class="player.theme">
 
   
   <!-- Page 1 -->
@@ -140,8 +140,9 @@
       };
 
       var getStyle = function(data){
-        console.log('get Style');
-        console.log(data);
+        var string = "theme-" + data;
+
+        saveToScope(string, 'theme');
       };
       var getScore = function(data){
         
@@ -160,6 +161,11 @@
 
       var getStyles = function(data){
         console.log('get Style Array');
+
+        var string = "theme-3";
+
+        saveToScope(string, 'theme');
+        
         console.log(data);
       };
 

@@ -28,7 +28,8 @@ body
 	height 100%
 body
 	font-family 'Open Sans'
-	background-color orange
+	//background-color #c31300
+	background-color #fff3e5
 *
 *:after
 *:before
@@ -43,6 +44,21 @@ body
 
 #main-scope
 	height 100%
+	background-color transparent
+	transition background 1s ease-in-out
+	background-repeat no-repeat
+	background-position center center
+	background-size cover
+	&.theme-0
+		//background-color #c31300
+		background-image url('../assets/img/bg1.jpg')
+		//background-color #ffcd17
+	&.theme-1
+		//background-color #ffcd17
+		background-image url('../assets/img/bg2.jpg')
+		//background-color #8dcc3c
+	&.theme-2
+		background-color #42647f
 .page
 	height 100%
 	position relative

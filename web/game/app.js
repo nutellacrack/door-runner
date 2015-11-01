@@ -148,7 +148,7 @@ app.controller('listCtrl', function ($scope, $timeout, uniqueId, scoreService, $
           }
 
           if($scope.livePlayerIndex > 0){
-            if($scope.liveScoreTable[$scope.livePlayerIndex -1].score == $scope.liveScoreTable[$scope.livePlayerIndex].score){
+            if($scope.liveScoreTable[$scope.livePlayerIndex -1].score <= $scope.liveScoreTable[$scope.livePlayerIndex].score){
               $scope.livePlayerIndex = Math.max(0,$scope.livePlayerIndex-1);
               console.log($scope.livePlayerIndex);
               $scope.$apply();
